@@ -11,6 +11,18 @@
         </li><!-- End Dashboard Nav -->
         <li class="nav-heading">Pages</li>
         <li class="nav-item">
+            <a class="nav-link collapsed" href="{{ route('user.index') }}">
+                <i class="bi bi-person"></i>
+                <span>Users</span>
+            </a>
+        </li><!-- End Profile Page Nav -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="{{ route('applicant.index') }}">
+                <i class="bi bi-person"></i>
+                <span>Applicants</span>
+            </a>
+        </li><!-- End Profile Page Nav -->
+        <li class="nav-item">
             <a class="nav-link collapsed" href="{{ route('profile.edit') }}">
                 <i class="bi bi-person"></i>
                 <span>Profile</span>

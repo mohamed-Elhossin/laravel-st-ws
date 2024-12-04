@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Applicant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use PDO;
 
 class ApplicantController extends Controller
 {
@@ -12,7 +15,9 @@ class ApplicantController extends Controller
      */
     public function index()
     {
-        //
+        $applicants = Applicant::with("user")->get();
+
+        return view('admin.pages.applicants.index', compact("applicants"));
     }
 
     /**
@@ -20,7 +25,7 @@ class ApplicantController extends Controller
      */
     public function create()
     {
-        //
+        return view("admin.pages.applicants.create");
     }
 
     /**
@@ -28,15 +33,44 @@ class ApplicantController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $fixedPassword = Hash::make("12345678");
+
+        $user = new User();
+        $user->name = $request->name;
+        $user->password = $fixedPassword;
+        $user->email =  $request->email;
+        $user->type = "applicant";
+        $user->save();
+
+
+        $applicant = new Applicant();
+        $applicant->position = $request->position;
+        $applicant->exp_years = $request->exp_years;
+        $applicant->address = $request->address;
+        $applicant->phone = $request->phone;
+        $applicant->education = $request->education;
+        $applicant->linkedIn = $request->linkedIn;
+        $applicant->user_id =  $user->id;
+        $CV_data = $request->file("cv");
+        $cv_name = time() . $CV_data->getClientOriginalName();
+        $location = public_path("upload/");
+        $CV_data->move($location, $cv_name);
+        $applicant->cv = $cv_name;
+        $applicant->save();
+
+
+        return redirect()->route("applicant.index")->with("done", "Create applicant Successfully");
     }
+
 
     /**
      * Display the specified resource.
      */
-    public function show(Applicant $applicant)
+    public function show($id)
     {
-        //
+        $applicant = Applicant::where('id', $id)->with("user")->first();
+
+        return view("admin.pages.applicants.show", compact("applicant"));
     }
 
     /**
@@ -61,5 +95,14 @@ class ApplicantController extends Controller
     public function destroy(Applicant $applicant)
     {
         //
+    }
+
+    public function download($id)
+    {
+        $downloadFile = Applicant::where("id", $id)->firstOrFail();
+        $file_name = $downloadFile->cv;
+        $file_path = public_path("upload/$file_name");
+
+        return response()->download($file_path);
     }
 }
