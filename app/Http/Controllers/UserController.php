@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\AddNewUserMail;
 use App\Models\Applicant;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
+ 
     /**
      * Display a listing of the resource.
      */
@@ -31,7 +34,8 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $fixedPassword = Hash::make("12345678");
+        $password = rand(0, 8999) . rand(0, 8999) . rand(0, 8999);
+        $fixedPassword = Hash::make($password);
 
         $user = new User();
         $user->name = $request->name;
@@ -39,6 +43,8 @@ class UserController extends Controller
         $user->email =  $request->email;
         $user->type = $request->type;
         $user->save();
+        Mail::to($user->email)->send(new AddNewUserMail($user, $password));
+
 
         return redirect()->route("user.index")->with("done", "Create User Successfully");
     }
@@ -46,10 +52,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
-    {
-
-    }
+    public function show($id) {}
 
     /**
      * Show the form for editing the specified resource.

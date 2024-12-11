@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\APIs;
 
-use PDO;
 use App\Models\User;
 use App\Models\Applicant;
 use App\Mail\AddNewUserMail;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
@@ -18,17 +18,15 @@ class ApplicantController extends Controller
     public function index()
     {
         $applicants = Applicant::with("user")->get();
-
-        return view('admin.pages.applicants.index', compact("applicants"));
+        $reponse = [
+            "status" => 200,
+            "data" => $applicants,
+            "message" => "All Applicant Data"
+        ];
+        return response($reponse, 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view("admin.pages.applicants.create");
-    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -45,7 +43,9 @@ class ApplicantController extends Controller
         $user->type = "applicant";
         $user->save();
 
-
+        $request->validate([
+            "position" => "required"
+        ]);
         $applicant = new Applicant();
         $applicant->position = $request->position;
         $applicant->exp_years = $request->exp_years;
@@ -62,7 +62,15 @@ class ApplicantController extends Controller
         $applicant->save();
 
         Mail::to($user->email)->send(new AddNewUserMail($user, $password));
-        return redirect()->route("applicant.index")->with("done", "Create applicant Successfully");
+
+        $reponse = [
+            "status" => 200,
+            "data" => $applicant,
+            "message" => "Create Applicant successfully"
+        ];
+
+
+        return response($reponse, 200);
     }
 
 
@@ -73,7 +81,20 @@ class ApplicantController extends Controller
     {
         $applicant = Applicant::where('id', $id)->with("user")->first();
 
-        return view("admin.pages.applicants.show", compact("applicant"));
+        if ($applicant == null) {
+            $reponse = [
+                "status" => 404,
+                "message" => " No Found Applicant "
+            ];
+        } else {
+            $reponse = [
+                "status" => 200,
+                "data" => $applicant,
+                "message" => "Get Applicant Data"
+            ];
+        }
+
+        return response($reponse, 200);
     }
 
     /**

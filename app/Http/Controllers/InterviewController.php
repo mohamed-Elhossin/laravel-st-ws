@@ -7,17 +7,14 @@ use Illuminate\Http\Request;
 
 class InterviewController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
+
     public function index()
     {
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
     public function create()
     {
         //
@@ -26,9 +23,14 @@ class InterviewController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, $inter_id)
     {
-        //
+        $interview = new Interview();
+        $interview->cv_review_id = $inter_id;
+        $interview->status = $request->status;
+        $interview->interview_date = $request->interview_date;
+        $interview->save();
+        return redirect()->back()->with("done", "تمت تحديد الانترفيو بنجاح");
     }
 
     /**

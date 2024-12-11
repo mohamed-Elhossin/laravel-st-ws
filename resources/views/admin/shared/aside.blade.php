@@ -16,10 +16,17 @@
                 <span>Users</span>
             </a>
         </li><!-- End Profile Page Nav -->
+        
         <li class="nav-item">
             <a class="nav-link collapsed" href="{{ route('applicant.index') }}">
                 <i class="bi bi-person"></i>
                 <span>Applicants</span>
+            </a>
+        </li><!-- End Profile Page Nav -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="{{ route('cv_review.index') }}">
+                <i class="bi bi-person"></i>
+                <span>CV Reviews</span>
             </a>
         </li><!-- End Profile Page Nav -->
         <li class="nav-item">

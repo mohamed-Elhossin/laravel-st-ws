@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('interviews', function (Blueprint $table) {
             $table->id();
             $table->foreignId("cv_review_id")->references("id")->on("cv_reviews")->onDelete("cascade");
-            $table->enum('status', ['waiting', 'rejected', 'accepted'])->default("waiting");
-            $table->string("notes")->default("Empty Notes");
+            $table->enum('status', ['noAction', 'Attend', 'ABS', 'Late'])->default("noAction");
+            $table->string("interview_date");
             $table->timestamps();
         });
     }

@@ -12,7 +12,7 @@
                 <li class="breadcrumb-item active">Data</li>
             </ol>
         </nav>
-    </div><!-- End Page Title -->
+    </div>
 
     <section class="section">
         <div class="row">
@@ -27,39 +27,34 @@
                         <h5 class="card-title">List Applicants
                             <a class=" float-end btn btn-info" href="{{ route('applicant.create') }}">Create New</a>
                         </h5>
-
                         <!-- Table with stripped rows -->
                         <table class="table datatable">
                             <thead>
                                 <tr>
                                     <th> #N </th>
                                     <th>Name</th>
-                                    <th>Email</th>
-                                    <th>position</th>
+
+                                    <th>status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($applicants as $item)
+                                @foreach ($reviews as $item)
                                     <tr>
-                                        <th>{{ $item->id}}</th>
-                                        <th>{{ $item->user->name }}</th>
-                                        <th>{{ $item->user->email }}</th>
-                                        <th>{{ $item->position }}</th>
+                                        <th>{{ $item->id }}</th>
+                                        <th>{{ $item->applicant->user->name }}</th>
+                                        <th>{{ $item->status }}</th>
                                         <th>
-                                            <a href="{{ route('applicant.show', $item->id) }}">Show</a>
+                                            <a href="{{ route('cv_review.show', $item->id) }}">Show</a>
                                         </th>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
                         <!-- End Table with stripped rows -->
-
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
 @endsection
-

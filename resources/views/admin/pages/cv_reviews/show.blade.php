@@ -24,38 +24,31 @@
                 @endif
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Show Applicants {{ $applicant->id }}
+                        <h5 class="card-title">Show Applicants {{ $review->id }}
                             <a class=" float-end btn btn-info" href="{{ route('applicant.create') }}">Create New</a>
                         </h5>
                         <div class="text-center">
-                            <h4 class="card-title">Name : {{ $applicant->user->name }}</h4>
+                            <h4 class="card-title">Name : {{ $review->applicant->user->name }}</h4>
                             <hr>
-                            <h4 class="card-title">Email : {{ $applicant->user->email }}</h4>
+                            <h4 class="card-title">Email : {{ $review->applicant->user->email }}</h4>
                             <hr>
-                            <h4 class="card-title">exp_years : {{ $applicant->exp_years }}</h4>
+                            <h4 class="card-title">exp_years : {{ $review->applicant->exp_years }}</h4>
                             <hr>
-                            <h4 class="card-title">address : {{ $applicant->address }}</h4>
+                            <h4 class="card-title">address : {{ $review->applicant->address }}</h4>
                             <hr>
-                            <h4 class="card-title">phone : {{ $applicant->phone }}</h4>
+                            <h4 class="card-title">phone : {{ $review->applicant->phone }}</h4>
                             <hr>
-                            <h4 class="card-title">education : {{ $applicant->education }}</h4>
+                            <h4 class="card-title">education : {{ $review->applicant->education }}</h4>
                             <hr>
-                            <h4 class="card-title">linkedIn : <a href="{{ $applicant->linkedIn }}">LinkedIn</a> </h4>
+                            <h4 class="card-title">linkedIn : <a href="{{ $review->applicant->linkedIn }}">LinkedIn</a>
+                            </h4>
                             <hr>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="d-grid">
-                                        <a href="{{ route('applicant.download', $applicant->id) }}"
-                                            class="btn btn-success my-3">
-                                            Download File From Here
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="d-grid">
                                         <button type="button" class="btn btn-primary my-3" data-bs-toggle="modal"
                                             data-bs-target="#exampleModal">
-                                            Create Cv_ReView
+                                            Create Inter View Data
                                         </button>
                                     </div>
                                 </div>
@@ -73,32 +66,32 @@
 
 
 
-
-
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Add Review For {{ $applicant->user->name }} </h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Add Review For {{ $review->applicant->user->name }}
+                </h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="post" action="{{ route('cv_review.store', $applicant->id) }}">
+                <form method="post" action="{{ route('interview.store', $review->id) }}">
                     @csrf
                     <div class="form-group">
                         <select name="status" class="form-control" id="">
                             <option disabled selected> -- Select Status -- </option>
-                            <option value="accepted">accepted</option>
-                            <option value="waiting">waiting</option>
-                            <option value="rejected">rejected</option>
+                            <option value="noAction">no Action</option>
+                            <option value="ABS">ABS</option>
+                            <option value="Late">Late</option>
+                            <option value="Late">Late</option>
                         </select>
                     </div>
                     <div class="form-group mt-3">
-                        <input type="text" class="form-control" name="notes" placeholder="Your Notes">
+                        <input type="datetime-local" class="form-control" name="interview_date">
                     </div>
                     <div class="d-grid my-3">
-                        <button type="submit" class="btn btn-info">Send Review</button>
+                        <button type="submit" class="btn btn-info">Send InterView Date</button>
                     </div>
                 </form>
             </div>

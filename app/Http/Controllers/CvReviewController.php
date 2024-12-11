@@ -12,7 +12,8 @@ class CvReviewController extends Controller
      */
     public function index()
     {
-        //
+        $reviews = CvReview::with('applicant.user')->get();
+        return view('admin.pages.cv_reviews.index', compact('reviews'));
     }
 
     /**
@@ -26,17 +27,32 @@ class CvReviewController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, $applicant_id)
     {
-        //
+
+        $applicant_idIsExists = CvReview::where('applicant_id', '=', $applicant_id)->exists();
+
+
+        if ($applicant_idIsExists) {
+            return redirect()->back()->with("done", "This Applicant Have A Review ");
+        }
+        $review = new CvReview();
+        $review->applicant_id  = $applicant_id;
+        $review->status  = $request->status;
+        $review->notes  = $request->notes;
+        $review->save();
+
+        return redirect()->back()->with("done", "Send CV Review Successfully");
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(CvReview $cvReview)
+    public function show($id)
     {
-        //
+        $review = CvReview::where("id", $id)->with('applicant.user')->first();
+
+        return view('admin.pages.cv_reviews.show', compact('review'));
     }
 
     /**
