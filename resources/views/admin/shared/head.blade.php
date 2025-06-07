@@ -35,3 +35,4 @@
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 <!-- Template Main CSS )}}"File -->
 <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+<link href="{{ asset('assets/css/all.min.css') }}" rel="stylesheet">

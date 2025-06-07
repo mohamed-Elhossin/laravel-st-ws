@@ -11,7 +11,7 @@
     @include('admin.shared.aside')
 
     <main id="main" class="main">
-        @yield('content');
+        @yield('content')
     </main>
 
     @include('admin.shared.script')

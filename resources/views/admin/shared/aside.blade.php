@@ -16,19 +16,19 @@
                 <span>Users</span>
             </a>
         </li><!-- End Profile Page Nav -->
-        
         <li class="nav-item">
-            <a class="nav-link collapsed" href="{{ route('applicant.index') }}">
+            <a class="nav-link collapsed" href="{{ route('employee.index') }}">
                 <i class="bi bi-person"></i>
-                <span>Applicants</span>
+                <span>Employees</span>
             </a>
         </li><!-- End Profile Page Nav -->
         <li class="nav-item">
-            <a class="nav-link collapsed" href="{{ route('cv_review.index') }}">
-                <i class="bi bi-person"></i>
-                <span>CV Reviews</span>
+            <a class="nav-link collapsed" href="{{ route('department.index') }}">
+                <i class="bi bi-building"></i>
+                <span>Departments</span>
             </a>
         </li><!-- End Profile Page Nav -->
+
         <li class="nav-item">
             <a class="nav-link collapsed" href="{{ route('profile.edit') }}">
                 <i class="bi bi-person"></i>

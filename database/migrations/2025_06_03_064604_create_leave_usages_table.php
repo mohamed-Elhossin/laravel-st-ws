@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('interviews', function (Blueprint $table) {
+        Schema::create('leave_usages', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("cv_review_id")->references("id")->on("cv_reviews")->onDelete("cascade");
-            $table->enum('status', ['noAction', 'Attend', 'ABS', 'Late'])->default("noAction");
-            $table->string("interview_date");
+            $table->string('start_date');
+            $table->string('end_date');
+            $table->enum('type', ['regular', 'casual']);
+            $table->string('reason')->nullable();
+            $table->foreignId("user_id")->references("id")->on("users")->onDelete("cascade");
             $table->timestamps();
         });
     }
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('interviews');
+        Schema::dropIfExists('leave_usages');
     }
 };

@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cv_reviews', function (Blueprint $table) {
+        Schema::create('leaves', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("applicant_id")->references("id")->on("applicants")->onDelete("cascade");
-            $table->enum('status', ['waiting', 'rejected','accepted'])->default("waiting");
-$table->string("notes")->default("Empty Notes");
+            $table->integer('total')->default(21);
+            $table->integer("urgent_days")->default(6);
+            $table->integer("normal_days")->default(15);
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ $table->string("notes")->default("Empty Notes");
      */
     public function down(): void
     {
-        Schema::dropIfExists('cv_reviews');
+        Schema::dropIfExists('leaves');
     }
 };

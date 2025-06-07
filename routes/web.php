@@ -1,11 +1,11 @@
 <?php
 
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\EmployeeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ApplicantController;
-use App\Http\Controllers\CvReviewController;
-use App\Http\Controllers\InterviewController;
+
 
 Route::get('/', function () {
     return view('auth.login');
@@ -13,7 +13,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return view('admin.pages.index');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
 // -------------
 Route::middleware('auth')->group(function () {
@@ -25,35 +25,42 @@ Route::middleware('auth')->group(function () {
         Route::get("/", [UserController::class, 'index'])->name('index');
         Route::get("/create", [UserController::class, 'create'])->name('create');
         Route::post("/store", [UserController::class, 'store'])->name('store');
+        Route::get("/edit/{user}", [UserController::class, 'edit'])->name('edit');
+        Route::post("/update/{user}", [UserController::class, 'update'])->name('update');
+        Route::get("/destroy/{user}", [UserController::class, 'destroy'])->name('destroy');
+        Route::get("/show/{user}", [UserController::class, 'show'])->name('show');
     });
 
-    Route::middleware("ApplicantRule")->group(function(){
-        Route::prefix("applicant")->name("applicant.")->group(function () {
-            Route::get("/", [ApplicantController::class, 'index'])->name('index');
-            Route::get("/create", [ApplicantController::class, 'create'])->name('create');
-            Route::post("/store", [ApplicantController::class, 'store'])->name('store');
-            Route::get("/show/{id}", [ApplicantController::class, 'show'])->name('show');
-            Route::get("/download/{id}", [ApplicantController::class, 'download'])->name('download');
-        });
 
+    Route::prefix("employee")->name("employee.")->group(function () {
+        Route::get("/", [EmployeeController::class, 'index'])->name('index');
+        Route::get("/create", [EmployeeController::class, 'create'])->name('create');
+        Route::post("/store", [EmployeeController::class, 'store'])->name('store');
+        Route::get("/edit/{employee}", [EmployeeController::class, 'edit'])->name('edit');
+        Route::put("/update/{employee}", [EmployeeController::class, 'update'])->name('update');
+        Route::get("/destroy/{employee}", [EmployeeController::class, 'destroy'])->name('destroy');
+        Route::get('/employees/{employee}', [EmployeeController::class, 'show'])->name('employees.show');
     });
 
-    Route::prefix("cv_review")->name("cv_review.")->group(function () {
-        Route::get("/", [CvReviewController::class, 'index'])->name('index');
-        Route::post("/store/{id}", [CvReviewController::class, 'store'])->name('store');
-        Route::get("/show/{id}", [CvReviewController::class, 'show'])->name('show');
-    });
 
-    Route::prefix("interview")->name("interview.")->group(function () {
-        Route::get("/", [InterviewController::class, 'index'])->name('index');
-        Route::post("/store/{id}", [InterviewController::class, 'store'])->name('store');
-        Route::get("/show/{id}", [InterviewController::class, 'show'])->name('show');
+    Route::prefix("department")->name("department.")->group(function () {
+        Route::get("/", [DepartmentController::class, 'index'])->name('index');
+        Route::get("/create", [DepartmentController::class, 'create'])->name('create');
+        Route::post("/store", [DepartmentController::class, 'store'])->name('store');
+        Route::get("/edit/{employee}", [DepartmentController::class, 'edit'])->name('edit');
+        Route::post("/update/{employee}", [DepartmentController::class, 'update'])->name('update');
+        Route::get("/destroy/{employee}", [DepartmentController::class, 'destroy'])->name('destroy');
+        Route::get("/show/{employee}", [DepartmentController::class, 'show'])->name('show');
+        Route::resource('departments', DepartmentController::class);
+        Route::resource('employees', EmployeeController::class);
     });
 });
-// CSRF
+
 
 
 
 
 
 require __DIR__ . '/auth.php';
+Route::resource('departments', DepartmentController::class);
+Route::resource('employees', EmployeeController::class);

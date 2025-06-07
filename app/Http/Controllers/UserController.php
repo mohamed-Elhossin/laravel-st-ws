@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\AddNewUserMail;
-use App\Models\Applicant;
 use App\Models\User;
+use App\Models\Applicant;
+use Illuminate\Support\Str;
+use App\Mail\AddNewUserMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
- 
+
     /**
      * Display a listing of the resource.
      */
@@ -34,14 +35,14 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $password = rand(0, 8999) . rand(0, 8999) . rand(0, 8999);
+        $password =  Str::random(10);
         $fixedPassword = Hash::make($password);
 
         $user = new User();
         $user->name = $request->name;
         $user->password = $fixedPassword;
         $user->email =  $request->email;
-        $user->type = $request->type;
+        $user->type = 'admin';
         $user->save();
         Mail::to($user->email)->send(new AddNewUserMail($user, $password));
 
@@ -75,6 +76,8 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::find($id);
+        $user->delete();
+        return redirect()->route("user.index")->with("done", "Delete User Successfully");
     }
 }

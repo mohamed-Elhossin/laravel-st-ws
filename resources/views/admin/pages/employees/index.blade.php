@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="pagetitle">
-        <h1>Data Tables</h1>
+        <h1>Employees </h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="index.html">Home</a></li>
@@ -18,14 +18,15 @@
         <div class="row">
             <div class="col-lg-12">
                 @if (Session::has('done'))
-                    <div class="alert alert-success">
+                    <div class="alert alert-success alert-dismissible fade show">
                         {{ Session::get('done') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">List Applicants
-                            <a class=" float-end btn btn-info" href="{{ route('applicant.create') }}">Create New</a>
+                        <h5 class="card-title">Datatables
+                            <a class=" float-end btn btn-info" href="{{ route('employee.create') }}">Create New</a>
                         </h5>
 
                         <!-- Table with stripped rows -->
@@ -35,22 +36,23 @@
                                     <th> #N </th>
                                     <th>Name</th>
                                     <th>Email</th>
-                                    <th>position</th>
+                                    <th>Department</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($applicants as $item)
-                                    <tr>
-                                        <th>{{ $item->id}}</th>
-                                        <th>{{ $item->user->name }}</th>
-                                        <th>{{ $item->user->email }}</th>
-                                        <th>{{ $item->position }}</th>
-                                        <th>
-                                            <a href="{{ route('applicant.show', $item->id) }}">Show</a>
-                                        </th>
-                                    </tr>
+                                <tr>
+                                    @foreach ($employee as $item)
+                                        <td> {{ $loop->iteration }} </td>
+                                        <td> {{ $item->user->name }} </td>
+                                        <td> {{ $item->user->email }} </td>
+                                        <td> {{ $item->department->name }} </td>
+                                        <td><a class="text-danger" href="{{ route('employee.destroy', $item->user_id) }}"> Delete
+                                            </a>
+                                        </td>
+                                </tr>
                                 @endforeach
+                                </tr>
                             </tbody>
                         </table>
                         <!-- End Table with stripped rows -->
@@ -62,4 +64,3 @@
         </div>
     </section>
 @endsection
-
