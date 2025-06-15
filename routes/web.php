@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\DepartmentController;
-use App\Http\Controllers\EmployeeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\DepartmentController;
 
 
 Route::get('/', function () {
@@ -40,6 +41,16 @@ Route::middleware('auth')->group(function () {
         Route::put("/update/{employee}", [EmployeeController::class, 'update'])->name('update');
         Route::get("/destroy/{employee}", [EmployeeController::class, 'destroy'])->name('destroy');
         Route::get('/employees/{employee}', [EmployeeController::class, 'show'])->name('employees.show');
+    });
+    
+    Route::prefix("leave")->name("leave.")->group(function () {
+        Route::get("/", [LeaveController::class, 'index'])->name('index');
+        Route::get("/create", [LeaveController::class, 'create'])->name('create');
+        Route::post("/store", [LeaveController::class, 'store'])->name('store');
+        Route::get("/edit/{leave}", [LeaveController::class, 'edit'])->name('edit');
+        Route::put("/update/{leave}", [LeaveController::class, 'update'])->name('update');
+        Route::get("/destroy/{leave}", [LeaveController::class, 'destroy'])->name('destroy');
+        Route::get('/employees/{employee}', [LeaveController::class, 'show'])->name('employees.show');
     });
 
 

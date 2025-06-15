@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Department;
-use App\Models\Employee;
 use App\Models\User;
+use App\Models\Employee;
+use App\Models\Department;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class EmployeeController extends Controller
 {
     public function index()
     {
-        $employees = Employee::with(['user', 'department'])->get();
+        $employees = Employee::with(['user', 'department' ])->get();
+
         return view('employees.index', compact('employees'));
     }
 
@@ -133,6 +134,7 @@ class EmployeeController extends Controller
 
     public function show(Employee $employee)
     {
+     $employee = Employee::with(['user', 'department', 'leaves'])->findOrFail($employee->id);
         return view('employees.show', compact('employee'));
     }
 }

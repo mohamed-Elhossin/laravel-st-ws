@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('total')->default(21);
             $table->integer("urgent_days")->default(6);
             $table->integer("normal_days")->default(15);
+            $table->foreignId("employee_id")->references("id")->on("employees")->onDelete("cascade");
             $table->timestamps();
         });
     }

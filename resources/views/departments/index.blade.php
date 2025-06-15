@@ -15,12 +15,14 @@
                     </div>
                     <div class="card-body">
                         @if (session('success'))
-                            <div class="alert alert-success alert-dismissible">
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                                <h5><i class="icon fas fa-check"></i> Success!</h5>
+                            <div class="alert alert-success alert-dismissible fade show">
                                 {{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+
                             </div>
                         @endif
+
 
                         <table class="table table-bordered table-striped">
                             <thead>
@@ -36,13 +38,16 @@
                                         <td>{{ $department->id }}</td>
                                         <td>{{ $department->name }}</td>
                                         <td>
-                                            <a href="{{ route('departments.edit', $department) }}" class="btn btn-info btn-sm">
+                                            <a href="{{ route('departments.edit', $department) }}"
+                                                class="btn btn-info btn-sm">
                                                 <i class="fas fa-pencil-alt"></i> Edit
                                             </a>
-                                            <form action="{{ route('departments.destroy', $department) }}" method="POST" class="d-inline">
+                                            <form action="{{ route('departments.destroy', $department) }}" method="POST"
+                                                class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this department?')">
+                                                <button type="submit" class="btn btn-danger btn-sm"
+                                                    onclick="return confirm('Are you sure you want to delete this department?')">
                                                     <i class="fas fa-trash"></i> Delete
                                                 </button>
                                             </form>

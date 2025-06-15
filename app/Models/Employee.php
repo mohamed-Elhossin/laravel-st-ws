@@ -21,6 +21,14 @@ class Employee extends Model
         return $this->belongsTo(Department::class, 'department_id');
     }
 
+    public function leaves()
+    {
+        return $this->hasOne(Leave::class, 'employee_id');
+    }
+    /**
+     * Get the user that owns the employee.
+     */
+  
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

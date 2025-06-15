@@ -1231,3 +1231,40 @@ h6 {
   font-size: 13px;
   color: #012970;
 }
+
+
+
+
+
+
+
+
+
+.form-group   {
+  margin: 15px 0;
+}
+
+.form-control {
+  border-radius: 4px;
+  
+  font-size: 14px;
+  color: #444444;
+  border: 1px solid rgba(1, 41, 112, 0.2);
+}
+.form-control:focus {
+  outline: none;
+  box-shadow: 0 0 10px 0 rgba(1, 41, 112, 0.15);
+  border: 1px solid rgba(1, 41, 112, 0.3);
+}
+.form-select {
+  border-radius: 4px;
+  padding: 10px 15px;
+  font-size: 14px;
+  color: #444444;
+  border: 1px solid rgba(1, 41, 112, 0.2);
+}
+.form-select:focus {
+  outline: none;
+  box-shadow: 0 0 10px 0 rgba(1, 41, 112, 0.15);
+  border: 1px solid rgba(1, 41, 112, 0.3);
+}
