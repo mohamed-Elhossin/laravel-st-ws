@@ -49,7 +49,7 @@ Route::middleware('auth')->group(function () {
         Route::post('{id}', [LeaveUsageController::class, 'update'])->name("update");
 
         // حذف
-        // Route::get('{id}', [LeaveUsageController::class, 'destroy'])->name("destroy");
+        Route::get('/delete/{id}', [LeaveUsageController::class, 'destroy'])->name("destroy");
     });
 
     Route::prefix("employee")->name("employee.")->group(function () {

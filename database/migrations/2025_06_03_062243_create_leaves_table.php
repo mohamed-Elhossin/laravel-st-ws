@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('total')->default(21);
             $table->integer("urgent_days")->default(6);
             $table->integer("normal_days")->default(15);
+            $table->integer("sick_days")->default(15);
             $table->foreignId("employee_id")->references("id")->on("employees")->onDelete("cascade");
             $table->timestamps();
         });

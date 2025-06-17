@@ -135,15 +135,19 @@
                                         <table class="table table-bordered">
                                             <tr>
                                                 <th width="40%">Total Leaves</th>
-                                                <td>{{ $employee->leaves->total }}</td>
+                                                <td>{{ $employee->leaves->total }} OF {{ $allDayData['all']['total'] }} </td>
                                             </tr>
                                             <tr>
                                                 <th>Urgent Days</th>
-                                                <td>{{ $employee->leaves->urgent_days }}</td>
+                                                <td>{{ $employee->leaves->urgent_days }} OF {{ $allDayData['all']['urgent'] }} </td>
                                             </tr>
                                             <tr>
                                                 <th>Normal Days</th>
-                                                <td>{{ $employee->leaves->normal_days }}</td>
+                                                <td>{{ $employee->leaves->normal_days }} OF {{ $allDayData['all']['normal'] }} </td>
+                                            </tr>
+                                                  <tr>
+                                                <th>Sick Days</th>
+                                                <td>{{ $employee->leaves->sick_days }} OF {{ $allDayData['all']['sick'] }} </td>
                                             </tr>
                                         </table>
                                     </div>

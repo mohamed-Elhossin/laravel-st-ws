@@ -41,8 +41,9 @@
                                 <label for="type" class="form-label">Leave Type</label>
                                 <select name="type" id="type" class="form-select">
                                     <option value="">Select Leave Type</option>
-                                    <option value="casual">Urgent</option>
-                                    <option value="regular">Normal</option>
+                                    <option value="urgent">Urgent</option>
+                                    <option value="normal">Normal</option>
+                                    <option value="sick">Sick</option>
                                 </select>
                             </div>
                             <div class="mb-3">

@@ -62,6 +62,11 @@
                                         </td>
                                     </tr>
                                     <tr>
+                                        <th>Birth Date</th>
+                                        <td>{{ $employee->birth_date ? date('F d, Y', strtotime($employee->birth_date)) : 'Not set' }}
+                                        </td>
+                                    </tr>
+                                    <tr>
                                         <th>Status</th>
                                         <td>
                                             @if (!$employee->end_date || \Carbon\Carbon::parse($employee->end_date)->isFuture())
@@ -82,23 +87,34 @@
                         <div class="card-body">
                             <h4 class="my-2">Leave Details
                                 {{-- Button trigger modal --}}
-                                <a class=" float-end btn btn-link" href="{{ route('leave-usages.create', $employee->id) }}">
+                                <a class=" float-end btn btn-link"
+                                    href="{{ route('leave-usages.create', $employee->id) }}">
                                     Use Leave
                                 </a>
-
+                                @if (count($leaveUsages) == 0)
+                                    <a class=" float-end btn btn-link text-dangqer"
+                                        href="{{ route('leave.destroy', $employee->leaves->id) }}">
+                                        Delete Leave
+                                    </a>
+                                @endif
                             </h4>
+
                             <table class="table table-bordered">
                                 <tr>
                                     <th width="40%">Total Leaves</th>
-                                    <td>{{ $employee->leaves->total }}</td>
+                                    <td>{{ $employee->leaves->total }} OF {{ $allDayData['all']['total'] }}</td>
                                 </tr>
                                 <tr>
-                                    <th>casual Days</th>
-                                    <td>{{ $employee->leaves->urgent_days }}</td>
+                                    <th>urgent Days</th>
+                                    <td>{{ $employee->leaves->urgent_days }} OF {{ $allDayData['all']['urgent'] }}</td>
                                 </tr>
                                 <tr>
-                                    <th>regular Days</th>
-                                    <td>{{ $employee->leaves->normal_days }}</td>
+                                    <th>normal Days</th>
+                                    <td>{{ $employee->leaves->normal_days }} OF {{ $allDayData['all']['normal'] }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Sick Days</th>
+                                    <td>{{ $employee->leaves->sick_days }} OF {{ $allDayData['all']['sick'] }}</td>
                                 </tr>
                             </table>
                         </div>
@@ -116,12 +132,17 @@
                             <form method="post" action="{{ route('leave.store') }}">
                                 @csrf
                                 <div class="form-group">
-                                    <label for=""> casual days</label>
+                                    <label for=""> urgent days</label>
                                     <input type="number" name="urgent_days" id="urgent_days" class="form-control">
                                 </div>
                                 <div class="form-group">
-                                    <label for="">regular days</label>
+                                    <label for="">normal days</label>
                                     <input type="number" name="normal_days" id="normal_days" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Sick days</label>
+                                    <input type="number" name="sick_days" value="12" id="sick_days"
+                                        class="form-control">
                                 </div>
                                 <div class="form-group">
                                     <input type="hidden" value="{{ $employee->id }}" name="employee_id" id="user_id"
@@ -145,6 +166,7 @@
                                         <th>End Date</th>
                                         <th>Days Count</th>
                                         <th>Days List</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -167,6 +189,7 @@
                                                     <span class="text-muted">No days listed</span>
                                                 @endif
                                             </td>
+                                            <td> <a href="{{ route('leave-usages.destroy', $usage['id']) }}">Delete</a> </td>
                                         </tr>
                                     @endforeach
                                 </tbody>

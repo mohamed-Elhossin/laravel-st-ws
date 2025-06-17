@@ -13,6 +13,8 @@ class Employee extends Model
         'join_date',
         'end_date',
         'user_id',
+        'birth_date',
+        'type',
         'department_id'
     ];
 
@@ -28,7 +30,7 @@ class Employee extends Model
     /**
      * Get the user that owns the employee.
      */
-  
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('start_date');
             $table->string('end_date');
-            $table->enum('type', ['regular', 'casual']);
+            $table->enum('type', ['normal', 'urgent', 'sick']);
             $table->string('reason')->nullable();
             $table->foreignId("employee_id")->references("id")->on("employees")->onDelete("cascade");
             $table->timestamps();

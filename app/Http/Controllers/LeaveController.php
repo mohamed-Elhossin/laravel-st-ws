@@ -30,17 +30,19 @@ class LeaveController extends Controller
     {
 
         $request->validate([
-           
+
             'urgent_days' => 'required|integer',
             'normal_days' => 'required|integer',
             'employee_id' => 'required|exists:employees,id',
+            'sick_days' => 'required|integer',
         ]);
 
         Leave::create([
-            'total' => $request->input('urgent_days') + $request->input('normal_days'),
+            'total' => $request->input('urgent_days') + $request->input('normal_days') + $request->input('sick_days'),
             'urgent_days' => $request->input('urgent_days'),
             'normal_days' => $request->input('normal_days'),
             'employee_id' => $request->input('employee_id'),
+            'sick_days' => $request->input('sick_days'),
         ]);
 
         return redirect()->route("employees.show", $request->input('employee_id'))
@@ -74,8 +76,9 @@ class LeaveController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Leave $leave)
+    public function destroy($id)
     {
-        //
+        Leave::destroy($id);
+        return redirect()->back()->with('success', 'Leave deleted successfully.');
     }
 }

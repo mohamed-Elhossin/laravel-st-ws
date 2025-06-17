@@ -10,12 +10,14 @@ class Leave extends Model
         'total',
         'urgent_days',
         'normal_days',
+        'sick_days',
         'employee_id',
     ];
     protected $casts = [
         'total' => 'integer',
         'urgent_days' => 'integer',
         'normal_days' => 'integer',
+        'sick_days' => 'integer',
     ];
     public function employee()
     {

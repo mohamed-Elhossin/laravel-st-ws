@@ -46,7 +46,7 @@ class LeaveUsageController extends Controller
         $request->validate([
             'start_date' => 'required|date|after_or_equal:today',
             'end_date' => 'required|date|after_or_equal:start_date',
-            'type' => 'required|in:regular,casual',
+            'type' => 'required|in:normal,urgent,sick',
             'employee_id' => 'required|exists:employees,id',
         ]);
 
@@ -56,23 +56,29 @@ class LeaveUsageController extends Controller
 
         $leave = Leave::where('employee_id', $request->employee_id)->firstOrFail();
 
-        if ($request->type === 'regular') {
+        if ($request->type === 'normal') {
             if ($daysCount > $leave->normal_days) {
                 return redirect()->back()->with('message', 'Not enough normal leave days.');
             }
-        } elseif ($request->type === 'casual') {
+        } elseif ($request->type === 'urgent') {
             if ($daysCount > $leave->urgent_days) {
                 return redirect()->back()->with('message', 'Not enough urgent leave days.');
+            }
+        } elseif ($request->type === 'sick') {
+            if ($daysCount > $leave->sick_days) {
+                return redirect()->back()->with('message', 'Not enough sick leave days.');
             }
         }
 
         // لو عدّى التحقق: انشئ السجل و اخصم
         $usage = LeaveUsage::create($request->all());
 
-        if ($usage->type === 'regular') {
+        if ($usage->type === 'normal') {
             $leave->normal_days -= $daysCount;
-        } elseif ($usage->type === 'casual') {
+        } elseif ($usage->type === 'urgent') {
             $leave->urgent_days -= $daysCount;
+        } elseif ($usage->type === 'sick') {
+            $leave->sick_days -= $daysCount;
         }
 
         $leave->total -= $daysCount;
@@ -116,7 +122,7 @@ class LeaveUsageController extends Controller
         $request->validate([
             'start_date'  => 'required|date',
             'end_date'    => 'required|date|after_or_equal:start_date',
-            'type'        => 'required|in:regular,casual',
+            'type'        => 'required',
         ]);
 
         $leave = Leave::where('employee_id', $usage->employee_id)->firstOrFail();
@@ -124,10 +130,12 @@ class LeaveUsageController extends Controller
         // 1️⃣ رجع الأيام القديمة
         $oldDays = Carbon::parse($usage->start_date)->diffInDays(Carbon::parse($usage->end_date)) + 1;
 
-        if ($usage->type === 'regular') {
+        if ($usage->type === 'normal') {
             $leave->normal_days += $oldDays;
-        } elseif ($usage->type === 'casual') {
+        } elseif ($usage->type === 'urgent') {
             $leave->urgent_days += $oldDays;
+        } elseif ($usage->type === 'sick') {
+            $leave->sick_days += $oldDays;
         }
         $leave->total += $oldDays;
 
@@ -137,10 +145,12 @@ class LeaveUsageController extends Controller
         // 3️⃣ خصم الأيام الجديدة
         $newDays = Carbon::parse($usage->start_date)->diffInDays(Carbon::parse($usage->end_date)) + 1;
 
-        if ($usage->type === 'regular') {
+        if ($usage->type === 'normal') {
             $leave->normal_days -= $newDays;
-        } elseif ($usage->type === 'casual') {
+        } elseif ($usage->type === 'urgent') {
             $leave->urgent_days -= $newDays;
+        } elseif ($usage->type === 'sick') {
+            $leave->sick_days -= $newDays;
         }
         $leave->total -= $newDays;
 
@@ -158,9 +168,9 @@ class LeaveUsageController extends Controller
 
         $daysCount = Carbon::parse($usage->start_date)->diffInDays(Carbon::parse($usage->end_date)) + 1;
 
-        if ($usage->type === 'regular') {
+        if ($usage->type === 'normal') {
             $leave->normal_days += $daysCount;
-        } elseif ($usage->type === 'casual') {
+        } elseif ($usage->type === 'urgent') {
             $leave->urgent_days += $daysCount;
         }
 
@@ -169,6 +179,7 @@ class LeaveUsageController extends Controller
 
         $usage->delete();
 
-        return response()->json(['message' => 'Deleted successfully']);
+        return redirect()->back()
+            ->with('success', 'Leave usage deleted successfully.');
     }
 }

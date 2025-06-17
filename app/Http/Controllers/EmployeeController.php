@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Leave;
 use App\Models\Employee;
 use Carbon\CarbonPeriod;
 use App\Models\Department;
@@ -36,7 +38,9 @@ class EmployeeController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'position' => 'required|string|max:255',
             'salary' => 'required|numeric',
+            'birth_date' => 'required|date',
             'join_date' => 'required|date',
+            'type' => 'required|in:employee,admin',
             'end_date' => 'nullable|date|after:join_date',
             'department_id' => 'required|exists:departments,id',
         ]);
@@ -60,9 +64,11 @@ class EmployeeController extends Controller
                 'user_id' => $user->id,
                 'department_id' => $request->department_id,
                 'position' => $request->position,
+                'birth_date' => $request->birth_date,
                 'salary' => $request->salary,
                 'join_date' => $request->join_date,
-                'end_date' => $request->end_date
+                'end_date' => $request->end_date,
+                'type' => $request->type,
             ]);
 
             DB::commit();
@@ -91,7 +97,7 @@ class EmployeeController extends Controller
             'salary' => 'required|numeric',
             'join_date' => 'required|date',
             'end_date' => 'nullable|date|after:join_date',
-            'department_id' => 'required|exists:departments,id',
+             'department_id' => 'required|exists:departments,id',
         ]);
 
         try {
@@ -103,8 +109,9 @@ class EmployeeController extends Controller
                 'position' => $request->position,
                 'salary' => $request->salary,
                 'join_date' => $request->join_date,
-                'end_date' => $request->end_date
-            ]);
+                'birth_date' => $request->birth_date,
+                'end_date' => $request->end_date,
+             ]);
 
             // Update user name if provided
             if ($request->has('name')) {
@@ -137,17 +144,14 @@ class EmployeeController extends Controller
 
     public function show(Employee $employee)
     {
-        // احضر كل الاستخدامات لهذا الموظف
-        $usages = LeaveUsage::where('employee_id', $employee->id)->get();
+         $usages = LeaveUsage::where('employee_id', $employee->id)->get();
 
-       $leaveUsages = [];
+        $leaveUsages = [];
 
         foreach ($usages as $usage) {
-            // أنشئ فترة زمنية لكل سجل من start_date إلى end_date
-            $period = CarbonPeriod::create($usage->start_date, $usage->end_date);
+             $period = CarbonPeriod::create($usage->start_date, $usage->end_date);
 
-            // ضع كل التواريخ داخل Array
-            $dates = [];
+             $dates = [];
             foreach ($period as $date) {
                 $dates[] = $date->toDateString();
             }
@@ -162,8 +166,59 @@ class EmployeeController extends Controller
                 'days_count' => count($dates),
             ];
         }
-        // return $leaveUsages;
-         $employee = Employee::with(['user', 'department', 'leaves'])->findOrFail($employee->id);
-        return view('employees.show', compact('employee', 'leaveUsages'));
+
+        $leave = [];
+        $allDayData = [];
+        if ($employee->leaves != null) {
+             $leave = Leave::where('employee_id', $employee->id)->firstOrFail();
+
+             $usages = LeaveUsage::where('employee_id', $employee->id)->get();
+
+             $used = [
+                'normal' => 0,
+                'urgent' => 0,
+                'sick'   => 0,
+            ];
+
+            foreach ($usages as $usage) {
+                $daysCount = Carbon::parse($usage->start_date)->diffInDays(Carbon::parse($usage->end_date)) + 1;
+
+                if ($usage->type === 'normal') {
+                    $used['normal'] += $daysCount;
+                } elseif ($usage->type === 'urgent') {
+                    $used['urgent'] += $daysCount;
+                } elseif ($usage->type === 'sick') {
+                    $used['sick'] += $daysCount;
+                }
+            }
+
+             $remaining = [
+                'normal' => $leave->normal_days,
+                'urgent' => $leave->urgent_days,
+                'sick'   => $leave->sick_days,
+            ];
+
+             $totalUsed = array_sum($used);
+            $totalRemaining = array_sum($remaining);
+
+             $all = [
+                'normal' => $used['normal'] + $remaining['normal'],
+                'urgent' => $used['urgent'] + $remaining['urgent'],
+                'sick'   => $used['sick'] + $remaining['sick'],
+                'total'  => $totalUsed + $totalRemaining,
+            ];
+
+             $allDayData = [
+                'used' => $used,
+                'remaining' => $remaining,
+                'total_used' => $totalUsed,
+                'total_remaining' => $totalRemaining,
+                'all' => $all,
+            ];
+        }
+
+
+        $employee = Employee::with(['user', 'department', 'leaves'])->findOrFail($employee->id);
+        return view('employees.show', compact('employee', 'leaveUsages', 'leave', 'allDayData'));
     }
 }

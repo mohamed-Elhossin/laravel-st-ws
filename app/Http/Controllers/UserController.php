@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Leave;
 use App\Models\Employee;
 use Carbon\CarbonPeriod;
 use App\Models\Applicant;
@@ -49,7 +51,66 @@ class UserController extends Controller
             ];
         }
 
-        return view("profile.profile_info", compact("user", "employee", "leaveUsages"));
+
+        $leave = [];
+        $allDayData = [];
+        if ($employee->leaves != null) {
+            // 1️⃣ هات بيانات الرخصة للموظف
+            $leave = Leave::where('employee_id', $employee->id)->firstOrFail();
+
+            // 2️⃣ هات الاستخدامات بتاعته
+            $usages = LeaveUsage::where('employee_id', $employee->id)->get();
+
+            // 3️⃣ اجمع الأيام المستخدمة لكل نوع
+            $used = [
+                'normal' => 0,
+                'urgent' => 0,
+                'sick'   => 0,
+            ];
+
+            foreach ($usages as $usage) {
+                $daysCount = Carbon::parse($usage->start_date)->diffInDays(Carbon::parse($usage->end_date)) + 1;
+
+                if ($usage->type === 'normal') {
+                    $used['normal'] += $daysCount;
+                } elseif ($usage->type === 'urgent') {
+                    $used['urgent'] += $daysCount;
+                } elseif ($usage->type === 'sick') {
+                    $used['sick'] += $daysCount;
+                }
+            }
+
+            // 4️⃣ المتبقي هو المسجل حاليًا في الجدول
+            $remaining = [
+                'normal' => $leave->normal_days,
+                'urgent' => $leave->urgent_days,
+                'sick'   => $leave->sick_days,
+            ];
+
+            // 5️⃣ احسب الإجمالي
+            $totalUsed = array_sum($used);
+            $totalRemaining = array_sum($remaining);
+
+            // 6️⃣ اجمع الكل في هيكل all
+            $all = [
+                'normal' => $used['normal'] + $remaining['normal'],
+                'urgent' => $used['urgent'] + $remaining['urgent'],
+                'sick'   => $used['sick'] + $remaining['sick'],
+                'total'  => $totalUsed + $totalRemaining,
+            ];
+
+            // 7️⃣ رجع النتيجة
+            $allDayData = [
+                'used' => $used,
+                'remaining' => $remaining,
+                'total_used' => $totalUsed,
+                'total_remaining' => $totalRemaining,
+                'all' => $all,
+            ];
+        }
+
+
+        return view("profile.profile_info", compact("user", "employee", "leaveUsages", 'allDayData'));
     }
     /**
      * Display a listing of the resource.
