@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('end_date');
             $table->enum('type', ['regular', 'casual']);
             $table->string('reason')->nullable();
-            $table->foreignId("user_id")->references("id")->on("users")->onDelete("cascade");
+            $table->foreignId("employee_id")->references("id")->on("employees")->onDelete("cascade");
             $table->timestamps();
         });
     }

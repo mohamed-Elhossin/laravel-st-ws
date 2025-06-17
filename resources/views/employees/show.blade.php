@@ -14,6 +14,14 @@
                         </div>
                     </div>
                     <div class="card-body">
+                        @if (session('success'))
+                            <div class="alert alert-success alert-dismissible fade show">
+                                {{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            </div>
+                        @endif
+
                         <div class="row">
                             <div class="col-md-6">
                                 <h4 class="my-2">Personal Information</h4>
@@ -56,7 +64,7 @@
                                     <tr>
                                         <th>Status</th>
                                         <td>
-                                            @if (!$employee->end_date)
+                                            @if (!$employee->end_date || \Carbon\Carbon::parse($employee->end_date)->isFuture())
                                                 <span class="badge text-bg-success">Active</span>
                                             @else
                                                 <span class="badge text-bg-danger">Inactive</span>
@@ -72,18 +80,24 @@
                     @if ($employee->leaves)
                         {{-- create Simple Design  --}}
                         <div class="card-body">
-                            <h4 class="my-2">Leave Details</h4>
+                            <h4 class="my-2">Leave Details
+                                {{-- Button trigger modal --}}
+                                <a class=" float-end btn btn-link" href="{{ route('leave-usages.create', $employee->id) }}">
+                                    Use Leave
+                                </a>
+
+                            </h4>
                             <table class="table table-bordered">
                                 <tr>
                                     <th width="40%">Total Leaves</th>
                                     <td>{{ $employee->leaves->total }}</td>
                                 </tr>
                                 <tr>
-                                    <th>Urgent Days</th>
+                                    <th>casual Days</th>
                                     <td>{{ $employee->leaves->urgent_days }}</td>
                                 </tr>
                                 <tr>
-                                    <th>Normal Days</th>
+                                    <th>regular Days</th>
                                     <td>{{ $employee->leaves->normal_days }}</td>
                                 </tr>
                             </table>
@@ -102,11 +116,11 @@
                             <form method="post" action="{{ route('leave.store') }}">
                                 @csrf
                                 <div class="form-group">
-                                    <label for="">urgent_days</label>
+                                    <label for=""> casual days</label>
                                     <input type="number" name="urgent_days" id="urgent_days" class="form-control">
                                 </div>
                                 <div class="form-group">
-                                    <label for="">normal_days</label>
+                                    <label for="">regular days</label>
                                     <input type="number" name="normal_days" id="normal_days" class="form-control">
                                 </div>
                                 <div class="form-group">
@@ -117,8 +131,57 @@
                             </form>
                         </div>
                     @endif
+                    <div class="container">
+                        <h2 class="mb-4">Employee Leave Usages</h2>
+
+                        @if (isset($leaveUsages) && count($leaveUsages) > 0)
+                            <table class="table table-bordered">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Type</th>
+                                        <th>Reason</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Days Count</th>
+                                        <th>Days List</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($leaveUsages as $usage)
+                                        <tr>
+                                            <td>{{ $loop->index + 1 }}</td>
+                                            <td>{{ $usage['type'] }}</td>
+                                            <td>{{ $usage['reason'] }}</td>
+                                            <td>{{ $usage['start_date'] }}</td>
+                                            <td>{{ $usage['end_date'] }}</td>
+                                            <td>{{ $usage['days_count'] }}</td>
+                                            <td>
+                                                @if (!empty($usage['days']))
+                                                    <ul class="mb-0">
+                                                        @foreach ($usage['days'] as $day)
+                                                            <li>{{ $day }}</li>
+                                                        @endforeach
+                                                    </ul>
+                                                @else
+                                                    <span class="text-muted">No days listed</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        @else
+                            <div class="alert alert-info">
+                                No leave usages found for this employee.
+                            </div>
+                        @endif
+                    </div>
+
+
                 </div>
             </div>
         </div>
     </div>
+
 @endsection

@@ -3,16 +3,54 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Employee;
+use Carbon\CarbonPeriod;
 use App\Models\Applicant;
+use App\Models\LeaveUsage;
 use Illuminate\Support\Str;
 use App\Mail\AddNewUserMail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
 
+
+    public function profile_info()
+    {
+        $user = Auth::user();
+        $employee = Employee::where('user_id', '=', $user->id)->first();
+
+        // احضر كل الاستخدامات لهذا الموظف
+        $usages = LeaveUsage::where('employee_id', $employee->id)->get();
+
+        $leaveUsages = [];
+
+        foreach ($usages as $usage) {
+            // أنشئ فترة زمنية لكل سجل من start_date إلى end_date
+            $period = CarbonPeriod::create($usage->start_date, $usage->end_date);
+
+            // ضع كل التواريخ داخل Array
+            $dates = [];
+            foreach ($period as $date) {
+                $dates[] = $date->toDateString();
+            }
+
+            $leaveUsages[] = [
+                'id' => $usage->id,
+                'type' => $usage->type,
+                'reason' => $usage->reason,
+                'start_date' => $usage->start_date,
+                'end_date' => $usage->end_date,
+                'days' => $dates,
+                'days_count' => count($dates),
+            ];
+        }
+
+        return view("profile.profile_info", compact("user", "employee", "leaveUsages"));
+    }
     /**
      * Display a listing of the resource.
      */

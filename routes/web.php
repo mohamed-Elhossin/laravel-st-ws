@@ -6,6 +6,7 @@ use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\LeaveUsageController;
 
 
 Route::get('/', function () {
@@ -18,7 +19,8 @@ Route::get('/dashboard', function () {
 
 // -------------
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get("profile_info", [UserController::class, 'profile_info'])->name("profile_info");
+    Route::get('/profile', [UserController::class, 'profile_info'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
@@ -33,6 +35,23 @@ Route::middleware('auth')->group(function () {
     });
 
 
+    Route::prefix("leave-usages")->name("leave-usages.")->group(function () {
+        Route::get('/', [LeaveUsageController::class, 'index'])->name("index");
+
+        Route::get("/create/{id}", [LeaveUsageController::class, 'create'])->name("create");
+        // عرض واحد
+        Route::get('{id}', [LeaveUsageController::class, 'show'])->name("show");
+
+        // إضافة جديد
+        Route::post('/', [LeaveUsageController::class, 'store'])->name("store");
+
+        // تعديل
+        Route::post('{id}', [LeaveUsageController::class, 'update'])->name("update");
+
+        // حذف
+        // Route::get('{id}', [LeaveUsageController::class, 'destroy'])->name("destroy");
+    });
+
     Route::prefix("employee")->name("employee.")->group(function () {
         Route::get("/", [EmployeeController::class, 'index'])->name('index');
         Route::get("/create", [EmployeeController::class, 'create'])->name('create');
@@ -42,7 +61,7 @@ Route::middleware('auth')->group(function () {
         Route::get("/destroy/{employee}", [EmployeeController::class, 'destroy'])->name('destroy');
         Route::get('/employees/{employee}', [EmployeeController::class, 'show'])->name('employees.show');
     });
-    
+
     Route::prefix("leave")->name("leave.")->group(function () {
         Route::get("/", [LeaveController::class, 'index'])->name('index');
         Route::get("/create", [LeaveController::class, 'create'])->name('create');

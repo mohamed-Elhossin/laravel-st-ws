@@ -4,17 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Employee;
+use Carbon\CarbonPeriod;
 use App\Models\Department;
+use App\Models\LeaveUsage;
 use Illuminate\Support\Str;
+use App\Mail\AddNewUserMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class EmployeeController extends Controller
 {
     public function index()
     {
-        $employees = Employee::with(['user', 'department' ])->get();
+        $employees = Employee::with(['user', 'department'])->get();
 
         return view('employees.index', compact('employees'));
     }
@@ -62,11 +66,11 @@ class EmployeeController extends Controller
             ]);
 
             DB::commit();
+            // Mail::to($user->email)->send(new AddNewUserMail($user, $password));
 
             // Return with the generated password
             return redirect()->route('employees.index')
                 ->with('success', 'Employee created successfully. The temporary password is: ' . $password);
-
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Error creating employee. Please try again.')
@@ -110,7 +114,6 @@ class EmployeeController extends Controller
             DB::commit();
             return redirect()->route('employees.index')
                 ->with('success', 'Employee updated successfully.');
-
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Error updating employee. Please try again.')
@@ -134,7 +137,33 @@ class EmployeeController extends Controller
 
     public function show(Employee $employee)
     {
-     $employee = Employee::with(['user', 'department', 'leaves'])->findOrFail($employee->id);
-        return view('employees.show', compact('employee'));
+        // احضر كل الاستخدامات لهذا الموظف
+        $usages = LeaveUsage::where('employee_id', $employee->id)->get();
+
+       $leaveUsages = [];
+
+        foreach ($usages as $usage) {
+            // أنشئ فترة زمنية لكل سجل من start_date إلى end_date
+            $period = CarbonPeriod::create($usage->start_date, $usage->end_date);
+
+            // ضع كل التواريخ داخل Array
+            $dates = [];
+            foreach ($period as $date) {
+                $dates[] = $date->toDateString();
+            }
+
+            $leaveUsages[] = [
+                'id' => $usage->id,
+                'type' => $usage->type,
+                'reason' => $usage->reason,
+                'start_date' => $usage->start_date,
+                'end_date' => $usage->end_date,
+                'days' => $dates,
+                'days_count' => count($dates),
+            ];
+        }
+        // return $leaveUsages;
+         $employee = Employee::with(['user', 'department', 'leaves'])->findOrFail($employee->id);
+        return view('employees.show', compact('employee', 'leaveUsages'));
     }
 }
