@@ -7,6 +7,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -50,7 +51,7 @@ class User extends Authenticatable
     /**
      * Get the leave associated with the user.
      */
- 
+
     /**
      * Get the department associated with the user.
      */
@@ -61,11 +62,9 @@ class User extends Authenticatable
     /**
      * Get the employees associated with the user.
      */
-    public function employees()
+    public function employee()
     {
-        return $this->hasMany(Employee::class);
+        return $this->hasOne(Employee::class);
     }
-
-
 
 }

@@ -31,6 +31,7 @@
                                     <th>Department</th>
                                     <th>Position</th>
                                     <th>Salary</th>
+                                    <th>Type</th>
                                     <th>Join Date</th>
                                     <th>Actions</th>
                                 </tr>
@@ -42,7 +43,9 @@
                                         <td>{{ $employee->user->email }}</td>
                                         <td>{{ $employee->department->name }}</td>
                                         <td>{{ $employee->position }}</td>
+
                                         <td>{{ $employee->salary }}</td>
+                                           <td>{{ $employee->type }}</td>
                                         <td>{{ $employee->join_date }}</td>
                                         <td>
                                             <a href="{{ route('employees.show', $employee) }}"

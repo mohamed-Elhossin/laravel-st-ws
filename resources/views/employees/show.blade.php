@@ -30,6 +30,7 @@
                                         <th width="30%">Name</th>
                                         <td>{{ $employee->user->name }}</td>
                                     </tr>
+
                                     <tr>
                                         <th>Email</th>
                                         <td>{{ $employee->user->email }}</td>
@@ -41,6 +42,10 @@
                                     <tr>
                                         <th>Department</th>
                                         <td>{{ $employee->department->name }}</td>
+                                    </tr>
+                                         <tr>
+                                        <th width="30%">Type</th>
+                                        <td>{{ $employee->type }}</td>
                                     </tr>
                                 </table>
                             </div>
