@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\LeaveUsageController;
 
@@ -25,6 +26,10 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
 
     Route::middleware('adminRole')->group(function () {
+
+
+        Route::resource('feedback', FeedbackController::class);
+
         Route::resource('news', NewsController::class);
         Route::prefix("user")->name("user.")->group(function () {
             Route::get("/", [UserController::class, 'index'])->name('index');

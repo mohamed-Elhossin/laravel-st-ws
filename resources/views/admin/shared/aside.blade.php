@@ -35,6 +35,12 @@
                     <span>Departments</span>
                 </a>
             </li><!-- End Profile Page Nav -->
+                 <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('feedback.index') }}">
+                    <i class="bi bi-building"></i>
+                    <span>Feedbacks</span>
+                </a>
+            </li><!-- End Profile Page Nav -->
         @endif
         <li class="nav-item">
             <a class="nav-link collapsed" href="{{ route('profile.edit') }}">
