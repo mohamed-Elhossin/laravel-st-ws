@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function () {
 
 
         Route::resource('feedback', FeedbackController::class);
+        Route::get("ontherFeedback", [FeedbackController::class, 'ontherFeedback'])->name('ontherFeedback');
 
         Route::resource('news', NewsController::class);
         Route::prefix("user")->name("user.")->group(function () {

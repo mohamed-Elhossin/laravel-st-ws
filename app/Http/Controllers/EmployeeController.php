@@ -76,7 +76,7 @@ class EmployeeController extends Controller
 
             // Return with the generated password
             return redirect()->route('employees.index')
-                ->with('success', 'Employee created successfully. The temporary password is: ' . $password);
+                ->with('success', 'Employee created successfully.' );
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Error creating employee. Please try again.')

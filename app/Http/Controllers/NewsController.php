@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\News;
+use App\Models\Employee;
 use Illuminate\Http\Request;
+use App\Mail\NewsCreatedMail;
+use Illuminate\Support\Facades\Mail;
 
 class NewsController extends Controller
 {
-  
+
 
     public function index()
     {
@@ -27,7 +30,16 @@ class NewsController extends Controller
             'description' => 'required|string'
         ]);
 
-        News::create($request->all());
+        $news =   News::create($request->all());
+
+        // Get all employees with user relation
+        $employees = Employee::with('user')->get();
+
+        foreach ($employees as $employee) {
+            if ($employee->user && $employee->user->email) {
+                Mail::to($employee->user->email)->send(new NewsCreatedMail($news));
+            }
+        }
 
         return redirect()->route('news.index')
             ->with('success', 'News created successfully.');
