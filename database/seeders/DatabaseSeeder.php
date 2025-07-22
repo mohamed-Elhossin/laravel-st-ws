@@ -3,8 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Database\Seeders\DepartmentSeeder;
+use Database\Seeders\EmployeeSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,7 +15,8 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         User::factory(1)->create();
+        $this->call(DepartmentSeeder::class);
 
-
+        $this->call(EmployeeSeeder::class);
     }
 }
