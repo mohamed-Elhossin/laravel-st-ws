@@ -37,7 +37,7 @@ class NewsController extends Controller
 
         foreach ($employees as $employee) {
             if ($employee->user && $employee->user->email) {
-                Mail::to($employee->user->email)->send(new NewsCreatedMail($news));
+                Mail::to($employee->user->email)->send(new NewsCreatedMail($news,  $news->title));
             }
         }
 

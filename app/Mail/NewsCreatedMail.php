@@ -14,15 +14,17 @@ class NewsCreatedMail extends Mailable
 { use Queueable, SerializesModels;
 
     public $news;
+    public $subject;
 
-    public function __construct(News $news)
+    public function __construct(News $news ,$subject )
     {
         $this->news = $news;
+        $this->subject = $subject;
     }
 
     public function build()
     {
-        return $this->subject("New News")
+        return $this->subject($this->subject)
                     ->view('mail.news_created');
     }
 }
