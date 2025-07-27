@@ -35,7 +35,7 @@
                     <span>Departments</span>
                 </a>
             </li><!-- End Profile Page Nav -->
-                 <li class="nav-item">
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="{{ route('feedback.index') }}">
                     <i class="bi bi-building"></i>
                     <span>Feedbacks</span>
@@ -48,8 +48,33 @@
                 <span>Profile</span>
             </a>
         </li><!-- End Profile Page Nav -->
+        <hr>
+        <li class="nav-heading  ">Hiring process <span class="badge bg-danger float-end">Soon</span> </li>
 
-
+        <li class="nav-item">
+            <a class="nav-link collapsed">
+                <i class="bi bi-person"></i>
+                <span> Available jobs</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed">
+                <i class="bi bi-person"></i>
+                <span> Applicants </span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed">
+                <i class="bi bi-person"></i>
+                <span> Interviews </span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed">
+                <i class="bi bi-person"></i>
+                <span> Final Stauts </span>
+            </a>
+        </li>
 
     </ul>
 

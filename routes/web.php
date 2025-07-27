@@ -15,7 +15,7 @@ use App\Http\Controllers\LeaveUsageController;
 
 Route::get('/', function () {
     return view('auth.login');
-});
+})->middleware("guest");
 
 Route::get('/dashboard', function () {
     $news = News::orderBy('created_at', 'desc')->get();
