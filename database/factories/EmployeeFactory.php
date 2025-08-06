@@ -19,12 +19,12 @@ class EmployeeFactory extends Factory
         return [
             'position' => "Front-End Team Leader",
             'salary' => "65000",
-            'join_date' => "15/10/2024",
-            'end_date' => "15/10/2025",
-            'user_id' => \App\Models\User::inRandomOrder()->first()?->id ?? \App\Models\User::factory(),
+            'join_date' => "2020-11-10",
+            'end_date' => "2025-10-15",
+            'user_id' => 1,
             'birth_date' => $this->faker->date('Y-m-d', '-20 years'),
             'type' => 'admin',
-            'department_id' => \App\Models\Department::inRandomOrder()->first()?->id ?? \App\Models\Department::factory(),
+            'department_id' => 1,
         ];
     }
 }

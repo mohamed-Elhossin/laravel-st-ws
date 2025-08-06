@@ -72,7 +72,7 @@ class EmployeeController extends Controller
             ]);
 
             DB::commit();
-            Mail::to($user->email)->send(new AddNewUserMail($user, $password));
+            // Mail::to($user->email)->send(new AddNewUserMail($user, $password));
 
             // Return with the generated password
             return redirect()->route('employees.index')

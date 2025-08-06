@@ -18,15 +18,9 @@
         </li><!-- End Profile Page Nav --> --}}
         @if (Auth::user()->employee->type == 'admin')
             <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ route('news.index') }}">
-                    <i class="bi bi-person"></i>
-                    <span>News</span>
-                </a>
-            </li><!-- End Profile Page Nav -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ route('employee.index') }}">
-                    <i class="bi bi-person"></i>
-                    <span>Employees</span>
+                <a class="nav-link collapsed" href="{{ route('companies.index') }}">
+                    <i class="bi bi-building"></i>
+                    <span>Companies</span>
                 </a>
             </li><!-- End Profile Page Nav -->
             <li class="nav-item">
@@ -36,9 +30,28 @@
                 </a>
             </li><!-- End Profile Page Nav -->
             <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('employee.index') }}">
+                    <i class="bi bi-person"></i>
+                    <span>Employees</span>
+                </a>
+            </li><!-- End Profile Page Nav -->
+
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="{{ route('feedback.index') }}">
                     <i class="bi bi-building"></i>
                     <span>Feedbacks</span>
+                </a>
+            </li><!-- End Profile Page Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('news.index') }}">
+                    <i class="bi bi-person"></i>
+                    <span>News</span>
+                </a>
+            </li><!-- End Profile Page Nav -->
+                        <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('countries.index') }}">
+                    <i class="bi bi-person"></i>
+                    <span>Countries</span>
                 </a>
             </li><!-- End Profile Page Nav -->
         @endif

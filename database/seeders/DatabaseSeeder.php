@@ -14,6 +14,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+            $this->call(CountrySeeder::class);
+
         User::factory(1)->create();
         $this->call(DepartmentSeeder::class);
 

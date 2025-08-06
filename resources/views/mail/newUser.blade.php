@@ -85,7 +85,7 @@
                 <div><span class="info-label">Password:</span> {{ $password }}</div>
             </div>
             <div class="info-box">
-                <div><span class="info-label">Login Link:</span> {{ env('Login_link') }}</div>
+                <div><span class="info-label">Login Link:</span> {{ env('Login_link', "https://hr-dev.bridge-bfc.com/") }}</div>
             </div>
 
             <p>We're excited to have you on board! You can now log in using your credentials above.</p>

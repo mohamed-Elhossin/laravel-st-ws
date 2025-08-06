@@ -11,7 +11,10 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\LeaveUsageController;
+use App\Http\Controllers\CompanyController;
+ 
 
+use App\Http\Controllers\CountryController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -96,6 +99,12 @@ Route::middleware('auth')->group(function () {
 
 
 
+Route::resource('countries', CountryController::class);
+
+    Route::resource('departments', DepartmentController::class);
+    Route::resource('employees', EmployeeController::class);
+    Route::resource('companies', CompanyController::class);
+
     Route::get("profile_info", [UserController::class, 'profile_info'])->name("profile_info");
     Route::get('/profile', [UserController::class, 'profile_info'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -110,5 +119,3 @@ Route::get("error403", function () {
 
 
 require __DIR__ . '/auth.php';
-Route::resource('departments', DepartmentController::class);
-Route::resource('employees', EmployeeController::class);

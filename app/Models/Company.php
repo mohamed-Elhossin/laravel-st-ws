@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 
-class Department extends Model
+class Company extends Model
 {
     use HasFactory;
     use Notifiable;
 
-    protected $table = "departments";
+    protected $table = "companies";
     protected $guarded = [];
 }
