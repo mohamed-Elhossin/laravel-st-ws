@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Department;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Company extends Model
 {
@@ -13,4 +14,9 @@ class Company extends Model
 
     protected $table = "companies";
     protected $guarded = [];
+
+     public function departments()
+    {
+        return $this->hasMany(Department::class);
+    }
 }

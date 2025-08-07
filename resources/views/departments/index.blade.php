@@ -29,6 +29,8 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Name</th>
+                                    <th>Company Name</th> {{-- New Column --}}
+
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -37,6 +39,8 @@
                                     <tr>
                                         <td>{{ $department->id }}</td>
                                         <td>{{ $department->name }}</td>
+                                        {{-- Display company name, with a fallback --}}
+                                        <td>{{ $department->company->name ?? 'N/A' }}</td>
                                         <td>
                                             <a href="{{ route('departments.edit', $department) }}"
                                                 class="btn btn-info btn-sm">

@@ -49,12 +49,14 @@ class CompanyController extends Controller
     /**
      * Display the specified company.
      */
-    public function show(Company $company)
+  public function show(Company $company)
     {
-        // Show company details
+        // Load the departments relationship
+        $company->load('departments');
+
+        // Show company details along with its departments
         return view('companies.show', compact('company'));
     }
-
     /**
      * Show the form for editing the specified company.
      */

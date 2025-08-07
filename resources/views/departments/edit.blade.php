@@ -34,6 +34,17 @@
                                 @enderror
                             </div>
                         </div>
+                        <div class="mb-3">
+    <label class="form-label">Company</label>
+    <select name="company_id" class="form-select" required>
+        <option value="">Select a Company</option>
+        @foreach($companies as $company)
+            <option value="{{ $company->id }}" {{ old('company_id', $department->company_id) == $company->id ? 'selected' : '' }}>
+                {{ $company->name }}
+            </option>
+        @endforeach
+    </select>
+</div>
                         <div class="card-footer">
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save"></i> Update Department
